@@ -2,7 +2,6 @@ package com.poc.standard;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,69 +28,47 @@ public class PersistancePreprationBolt extends BaseBasicBolt {
 		Map<String, List<List<String>>> filteredMap = (Map<String, List<List<String>>>) input
 				.getValueByField("batch");
 
-		
-		System.out.println(" filteredMap ......filteredMap "+filteredMap);
-		
-		Map<String, List<String>> totalRecords = new HashMap<String, List<String>>();
+		System.out.println(" filteredMap... " + filteredMap);
+		Map<String, String> totalRecord = new HashMap<String, String>();
 		float avgBid = 0;
 		String date = "";
 		String pub = "";
 		String geo = "";
-		int keyIndex = 0;
-
 		for (Entry<String, List<List<String>>> entry : filteredMap.entrySet()) {
-
-			List<String> rowTOSaveNoSQL = new ArrayList<String>();
-
 			String key = entry.getKey();
-			System.out.println(" key .........."+key);
-			
-			
 			if (!key.endsWith("impression")) {
-
 				List<List<String>> logRows = entry.getValue();
 				for (List<String> logRow : logRows) {
-
 					avgBid = avgBid + Float.parseFloat(logRow.get(3));
 					date = logRow.get(4);
 					pub = logRow.get(1);
 					geo = logRow.get(0);
 
 				}
-
+				// date,publisher,geo,imps,uniques,avgBids
 				// date 1
-				rowTOSaveNoSQL.add(getDateUptoMinute(date));
+				totalRecord.put("date", getDateUptoMinute(date));
 				// pub 2
-				rowTOSaveNoSQL.add(pub);
+				totalRecord.put("publisher", pub);
 				// geo 3
-				rowTOSaveNoSQL.add(geo);
-				// System.out.println(" before doing avg avgBid  "+avgBid+" freq "+(float)freq.get(0).intValue());
+				totalRecord.put("geo", geo);
 				avgBid = avgBid / (float) logRows.size();
-				// System.out.println(" avgBid  "+avgBid);
 				// avg bid 4
-				rowTOSaveNoSQL.add(Float.toString(avgBid));
-				// total impression 5
-				// rowTOSaveNoSQL.add(Integer.toString(totalImpressions.get(0)));
+				totalRecord.put("avgBids", new Float(avgBid).toString());
 				// uniques 6
-				rowTOSaveNoSQL.add(Integer.toString(logRows.size()));
-				
+				totalRecord.put("uniques",
+						new Integer(logRows.size()).toString());
 
 			} else {
 				// if (!key.endsWith("impression"))
 				List<List<String>> logRows = entry.getValue();
 				for (List<String> logRow : logRows) {
-					rowTOSaveNoSQL.add(logRow.get(0));
-					
+					totalRecord.put("imps", logRow.get(0));
 				}
-
 			}
-			keyIndex++;
-			totalRecords.put(new Integer(keyIndex).toString(),
-					rowTOSaveNoSQL);
 		}
 
-		System.out.println(" totalRecords  " + totalRecords);
-		collector.emit(new Values(totalRecords));
+		collector.emit(new Values(totalRecord));
 	}
 
 	private String getDateUptoMinute(String field) {

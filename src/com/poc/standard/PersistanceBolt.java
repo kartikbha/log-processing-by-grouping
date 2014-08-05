@@ -32,7 +32,6 @@ public class PersistanceBolt extends BaseRichBolt {
 	String MONDO_DB_COLLECTION = "testcollection2";
 	int MONDO_DB_PORT = 27017;
 	
-
 	public void execute(Tuple input, BasicOutputCollector collector) {
 
 	}
@@ -59,10 +58,8 @@ public class PersistanceBolt extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
-		Map<String,List<String>> recordToSave =  (Map<String, List<String>>) input.getValueByField("recordToPersist");
-		for (Entry<String, List<String>> entry : recordToSave.entrySet()) {
-			//System.out.println(" row  "+entry.getValue());
-		 }
+		Map<String,String> recordToSave =  (Map<String, String>) input.getValueByField("recordToPersist");
+	
 		System.out.println("recordToSave      "+recordToSave);
 		LOG.info(" recordToSave "+recordToSave);
 		System.out.println("recordToSave size "+recordToSave.size());

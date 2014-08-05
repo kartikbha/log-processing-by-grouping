@@ -3,12 +3,6 @@ package com.poc.standard.topology.local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.poc.standard.AnalysisLogicBolt;
-import com.poc.standard.BatchSizeFilterBolt;
-import com.poc.standard.LogGenerationSpout;
-import com.poc.standard.PersistanceBolt;
-import com.poc.standard.PersistancePreprationBolt;
-
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
@@ -16,6 +10,11 @@ import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
+
+import com.poc.standard.BatchSizeFilterBolt;
+import com.poc.standard.LogGenerationSpout;
+import com.poc.standard.PersistanceBolt;
+import com.poc.standard.PersistancePreprationBolt;
 
 public class ChimperLogAnalysisTopology {
 
@@ -33,16 +32,16 @@ public class ChimperLogAnalysisTopology {
 			conf.setMessageTimeoutSecs(300);
 			conf.setMaxSpoutPending(100);
 			conf.setDebug(false);
-			conf.setMaxTaskParallelism(10);
+			//conf.setMaxTaskParallelism(10);
 			
 			int batchSize = 10;
 			builder.setSpout("LogGenerationSpout", new LogGenerationSpout(batchSize), 1);
 
-			builder.setBolt("BatchSizeFilterBolt", new BatchSizeFilterBolt(batchSize),
-					2).setNumTasks(2).fieldsGrouping("LogGenerationSpout",new Fields("dateUpToMinute"));
+			builder.setBolt("BatchSizeFilterBolt", new BatchSizeFilterBolt(),
+					5).setNumTasks(5).fieldsGrouping("LogGenerationSpout",new Fields("dateUpToMinute"));
 
-			builder.setBolt("PersistancePrepreationBolt", new PersistancePreprationBolt(), 1)
-				.setNumTasks(1).shuffleGrouping("BatchSizeFilterBolt");
+			builder.setBolt("PersistancePrepreationBolt", new PersistancePreprationBolt(), 3)
+				.setNumTasks(3).shuffleGrouping("BatchSizeFilterBolt");
 			
 			builder.setBolt("PersistanceBolt", new PersistanceBolt(), 1)
 			.setNumTasks(1).shuffleGrouping("PersistancePrepreationBolt");

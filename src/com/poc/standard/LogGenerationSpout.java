@@ -30,16 +30,16 @@ public class LogGenerationSpout extends BaseRichSpout {
 	public LogGenerationSpout(int batchSize)  {
 		this.batchSize = batchSize;
 	}
-	//public final static String[] GEO = { "NY", "NC", "OH", "PA", "WA", "MA",
-		//"KY", "IL" };
+	public final static String[] GEO = { "NY", "NC", "OH", "PA", "WA", "MA",
+		"KY", "IL" };
 	
-	public final static String[] GEO = { "NY", "NY", "NY", "NY", "NY", "NY",
-		"NY", "NY" };
-	//public final static String[] PUBLISHER = { "pub1", "pub2", "pub3", "pub4",
-		//"pub5" };
+	//public final static String[] GEO = { "NY", "NY", "NY", "NY", "NY", "NY",
+		//"NY", "NY" };
+	public final static String[] PUBLISHER = { "pub1", "pub2", "pub3", "pub4",
+		"pub5" };
 	
-	public final static String[] PUBLISHER = { "pub1", "pub1", "pub1", "pub1",
-	"pub1" };
+	//public final static String[] PUBLISHER = { "pub1", "pub1", "pub1", "pub1",
+	//"pub1" };
 	
     public final static String[] ADVERTISER = { "adv10", "adv20", "adv30",
 			"adv40", "adv50" };
@@ -74,7 +74,7 @@ public class LogGenerationSpout extends BaseRichSpout {
 	    //LOG.info(" dispatched batch... ");
 		//System.out.println("dispatched batch...");
 	    try {
-			Thread.sleep(10000);
+			Thread.sleep(6000);
 		} catch (InterruptedException e) {
 		}
 	    
@@ -83,13 +83,15 @@ public class LogGenerationSpout extends BaseRichSpout {
 	private Values getNextLogs()  {
 		
 		try {
-			Thread.sleep(randInt(1, 10) * 50);
+			Thread.sleep(randInt(1, 10) * 20);
 		} catch (InterruptedException e) {
 		}
 		Values val = new Values();
 		val.add(++logId + "");
-		val.add(GEO[randomIndex(activityDistribution, randomGenerator)]);
-		val.add(PUBLISHER[randomIndex(activityDistribution, randomGenerator)]);
+		String geo = GEO[randomIndex(activityDistribution, randomGenerator)];
+		val.add(geo);
+		String pub = PUBLISHER[randomIndex(activityDistribution, randomGenerator)];
+		val.add(pub);
 		val.add(ADVERTISER[randomIndex(activityDistribution, randomGenerator)]);
 		val.add(WEBSITE[randomIndex(activityDistribution, randomGenerator)]);
 		val.add(BID[randomIndex(activityDistribution, randomGenerator)]);
@@ -97,7 +99,7 @@ public class LogGenerationSpout extends BaseRichSpout {
 		String fullTime = DATE_FORMAT.format(System.currentTimeMillis());
 		
 		val.add(fullTime);
-		val.add(getDateUptoMinute(fullTime));
+		val.add(geo+pub+getDateUptoMinute(fullTime));
 		
 		return val;
 	}

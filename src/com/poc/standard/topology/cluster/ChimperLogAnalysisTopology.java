@@ -33,7 +33,6 @@ public class ChimperLogAnalysisTopology {
 			conf.setMaxSpoutPending(100);
 			conf.setDebug(false);
 
-			// conf.setMaxTaskParallelism(3);
 			int batchSizeFilterBoltExecutor = 1;
 			int batchSizeFilterBoltTask = 1;
 
@@ -48,7 +47,7 @@ public class ChimperLogAnalysisTopology {
 
 			int logGenerationSpoutExecutor = 1;
 
-			int batchSize = 50;
+			int batchSize = 10;
 
 			int worker = 4;
 
@@ -57,17 +56,18 @@ public class ChimperLogAnalysisTopology {
 			}
 			if (args != null && args.length > 0) {
 
-				batchSizeFilterBoltExecutor = Integer.parseInt(args[0]);
-				batchSizeFilterBoltTask = Integer.parseInt(args[1]);
+				logGenerationSpoutExecutor = Integer.parseInt(args[0]);
+				
+				batchSizeFilterBoltExecutor = Integer.parseInt(args[1]);
+				batchSizeFilterBoltTask = Integer.parseInt(args[2]);
 
-				persistancePrepreationBoltExecutor = Integer.parseInt(args[2]);
-				persistancePrepreationBoltTask = Integer.parseInt(args[3]);
+				persistancePrepreationBoltExecutor = Integer.parseInt(args[3]);
+				persistancePrepreationBoltTask = Integer.parseInt(args[4]);
 
-				persistanceBoltExector = Integer.parseInt(args[4]);
-				persistanceBoltTask = Integer.parseInt(args[5]);
+				persistanceBoltExector = Integer.parseInt(args[5]);
+				persistanceBoltTask = Integer.parseInt(args[6]);
 
-				logGenerationSpoutExecutor = Integer.parseInt(args[6]);
-				batchSize = Integer.parseInt(args[7]);
+			    batchSize = Integer.parseInt(args[7]);
 				worker = Integer.parseInt(args[8]);
 
 			}
@@ -78,7 +78,7 @@ public class ChimperLogAnalysisTopology {
 			
 			
 			builder.setBolt("BatchSizeFilterBolt",
-					new BatchSizeFilterBolt(batchSize),
+					new BatchSizeFilterBolt(),
 					batchSizeFilterBoltExecutor)
 					.setNumTasks(batchSizeFilterBoltTask)
 					.fieldsGrouping("LogGenerationSpout",

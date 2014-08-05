@@ -1,9 +1,18 @@
 ########### These MUST be filled in for a storm configuration
-# storm.zookeeper.servers:
+storm.zookeeper.servers:
+      - "localhost"
 #     - "server1"
 #     - "server2"
-# 
-# nimbus.host: "nimbus"
+storm.local.dir: "/home/ec2-user/software/storm-logs"
+nimbus.host: "localhost"
+supervisor.slots.ports:
+    - 6700
+    - 6701
+    - 6702
+    - 6703
+worker.childopts: "-Xmx4024m"
+nimbus.childopts: "-Xmx1024m"
+supervisor.childopts: "-Xmx1024m"
 # 
 # 
 # ##### These may optionally be filled in:
@@ -21,10 +30,3 @@
 # drpc.servers:
 #     - "server1"
 #     - "server2"
-
-## Metrics Consumers
-# topology.metrics.consumer.register:
-#    - class: "org.mycompany.MyMetricsConsumer"
-#      argument: 
-#         - endpoint: "metrics-collector.mycompany.org"
-#      parallelism.hint: 1
