@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>log</artifactId>
+	<version>0.0.4-SNAPSHOT</version>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					 <descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<!-- Repository where we can found the storm dependencies -->
+		<repository>
+			<id>clojars.org</id>
+			<url>http://clojars.org/repo</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<!-- Storm Dependency -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.0</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+			<groupId>storm</groupId>
+			<artifactId>storm</artifactId>
+			<version>0.8.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+	    <groupId>org.mongodb</groupId>
+	        <artifactId>mongo-java-driver</artifactId>
+	        <version>2.12.3</version>
+        </dependency>
+   </dependencies>
+	<groupId>log-processing-by-grouping</groupId>
+</project>
